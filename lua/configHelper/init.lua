@@ -46,6 +46,7 @@ vim.api.nvim_create_user_command("CreatTest", function()
   create_file_in_directory()
 end, {})
 
+print("Config Helper plugin is loaded!")
 return {
   hello_world_function = hello_world_function,
   show_time = show_time,
