@@ -1,4 +1,5 @@
 vim = vim
+
 local M = {}
 function M.hello_world_function()
   print("Hello, World function!")
@@ -40,34 +41,76 @@ local function get_full_word_under_cursor()
 
   local word_start, word_end = cursor_col, cursor_col
 
-  while word_start > 1 and line:sub(word_start - 1, word_start - 1):match("[_%w./]") do
+  while word_start > 1 and line:sub(word_start - 1, word_start - 1):match("[$_%w./]") do
     word_start = word_start - 1
   end
 
-  while word_end <= #line and line:sub(word_end, word_end):match("[_%w./]") do
+  while word_end <= #line and line:sub(word_end, word_end):match("[$_%w./]") do
     word_end = word_end + 1
   end
 
   return line:sub(word_start, word_end - 1)
 end
 
+
+
 local function is_path(word)
   return true
 end
--- /bin/vim
--- aaa
--- ./config.lua
 
+local function get_current_buffer_content()
+    local buf = vim.api.nvim_get_current_buf()
+    local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+    return lines
+end
+
+local function search_word(lines, word)
+  local path = nil
+  for i = 1, (#lines), 1 do
+    if string.match(lines[i], word) then
+      path = string.match(lines[i], word .." *= *(.*)")
+      break
+    end
+  end
+
+  if path ~= nil then 
+    return path
+  else
+    print("Variable was not found")
+    return ""
+  end 
+end
+-- $test = ~/Desktop
+-- $test/programming/
 function M.go_by_path()
   -- Get the current cursor position
   local path = get_full_word_under_cursor()
-  print(path)
+  local word = ""
+  print("Path: (" .. path ..")")
+  word = string.match(path, "($%a+)")
+  -- print("Word: " .. word)
+  local need_search = true
+  if word == nil then
+    need_search = false 
+  else
+    path = string.gsub(path, word, "")
+  end
+
+  if need_search then
+    print("Path: " .. path .. " Word: " .. word)
+  end
   if is_path(path) then
-    print(path .. " is a path")
+    -- print("(" ..path .. ") is a path")
+    local lines = get_current_buffer_content()
+    if need_search then
+      local searched_word = search_word(lines, word)
+      vim.api.nvim_command("edit" .. searched_word .. path)
+    else
+      vim.api.nvim_command("edit" .. path)
+    end
   else
     print(path .. " is not a path")
   end
-  vim.api.nvim_command("edit" .. path)
 end
 
 return M
