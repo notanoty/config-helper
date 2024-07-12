@@ -24,13 +24,18 @@ local function is_path(path)
   print("The path is: (" .. path .. ")")
   if path == "" then return false
   end
-  -- print("Path checker(case 1): " .. string.match(path, "[/%a+1]+"))
-  -- print("Path checker(case 2): " .. string.match(path, "[~/%a+][/%a]+"))
-  if path == string.match(path, "[/%a]+") then
-    return true
-  elseif path == string.match(path, "[~/%a+][/%a]*")  then
-    return true
-  elseif path == string.match(path, "[./%a+][/%a]*")  then
+  -- print("Path checker(case test): " .. string.match(path, "[abc+]+"))
+  print("Path checker(case test): " .. string.match(path, "[~%.]?/.*"))
+  -- print("Path checker(case 1): " .. string.match(path, "[/%a+]+"))
+  -- print("Path checker(case 2): " .. string.match(path, "[~/%a+][/%a.]+"))
+  -- print("Path checker(case 3): " .. string.match(path, "[./%a+][/%a.]+"))
+  -- if path == string.match(path, "[/%a]+") then
+  --   return true
+  -- elseif path == string.match(path, "[~/%a+][/%a.]*")  then
+  --   return true
+  -- elseif path == string.match(path, "[./%a+][/%a.]*")  then
+  --   return true
+  if path == string.match(path, "[~.]?/.*") then
     return true
   end
   return false
@@ -52,6 +57,7 @@ local function search_word(lines, word)
   end
 
   if path ~= nil then
+    print("File path was found: " .. path)
     return path
   else
     print("Variable was not found")
@@ -82,6 +88,8 @@ end
 -- /test/test/a
 -- $test = ~/Desktop
 -- $test/programming/
+-- $UserScripts = $HOME/.config/hypr/UserScripts
+-- $UserScripts/roficalc.sh
 function M.go_by_path()
   local path = get_full_word_under_cursor()
   local word =nil 
@@ -90,6 +98,7 @@ function M.go_by_path()
   if word == nil then
     has_search = false
   else
+    print("Word: " .. word)
     path = string.gsub(path, word, "")
   end
 
@@ -104,7 +113,7 @@ function M.go_by_path()
       vim.api.nvim_command("edit" .. path)
     end
   else
-    print("Path (incoreect): "  .. path)
+    print("Path (incorect): ("  .. path .. ")")
   end
 end
 

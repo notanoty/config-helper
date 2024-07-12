@@ -6,6 +6,6 @@ vim.api.nvim_create_user_command("CreatTest", function()
   core.create_file_in_directory()
 end, {})
 
-vim.api.nvim_create_user_command("ReadPathMy", function()
+vim.api.nvim_create_user_command("GoByPath", function()
   core.go_by_path()
 end, {})
