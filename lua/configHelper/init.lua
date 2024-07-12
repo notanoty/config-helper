@@ -1,12 +1,18 @@
+vim = vim
 local M = {}
 
-M.core = require("configHelper.core")
+function M.setup()
+  -- Your plugin setup code here
+  vim.cmd('echo "configHelper loaded"')
+  -- Additional setup...
+  require("configHelper.core")
 
-require("configHelper.commands")
+  require("configHelper.commands")
 
-require("configHelper.mappings")
+  require("configHelper.mappings")
 
-require("configHelper.autocommands")
+  require("configHelper.autocommands")
 
+end
 
 return M
