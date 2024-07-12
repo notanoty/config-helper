@@ -3,15 +3,15 @@ local M = {}
 
 function M.setup()
   -- Your plugin setup code here
-  vim.cmd('echo "configHelper loaded"')
+  vim.cmd('echo "config-helper is loaded"')
   -- Additional setup...
-  require("configHelper.core")
+  require("config-helper.core")
 
-  require("configHelper.commands")
+  require("config-helper.commands")
 
-  require("configHelper.mappings")
+  require("config-helper.mappings")
 
-  require("configHelper.autocommands")
+  require("config-helper.autocommands")
 
 end
 
